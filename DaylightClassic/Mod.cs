@@ -1,6 +1,4 @@
-﻿using System.Linq;
-using DaylightClassic.Options;
-using ICities;
+﻿using ICities;
 
 namespace DaylightClassic
 {
@@ -12,14 +10,7 @@ namespace DaylightClassic
 
         public void OnSettingsUI(UIHelperBase helper)
         {
-            var group = helper.AddGroup("Daylight Classic Options");
-            var properties = typeof(Options.Options).GetProperties();
-            foreach (var name in from property in properties select property.Name)
-            {
-                var description = OptionsHolder.Options.GetPropertyDescription(name);
-                group.AddCheckbox(description, name, OptionsHolder.Options.GetPropertyAction(name));
-
-            }
+            Options.Util.AddOptionsGroup(helper, "Daylight Classic Options");
         }
     }
 }

@@ -47,6 +47,20 @@ namespace DaylightClassic
 
         private static Gradient _colorAd;
 
+        public static void Reset()
+        {
+            _europeanClassic = null;
+            _tropicalClassic = null;
+            _northClassic = null;
+            _sunnyClassic = null;
+            _europeanAd = null;
+            _tropicalAd = null;
+            _northAd = null;
+            _sunnyAd = null;
+            _intensityAd = -1.0f;
+            //TODO(earalov): destroy textures?
+        }
+
         public static void ReplaceLuts(bool toClassic)
         {
             if (Util.InMenu())

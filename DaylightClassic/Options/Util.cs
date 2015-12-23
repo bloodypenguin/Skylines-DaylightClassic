@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using ICities;
 
 namespace DaylightClassic.Options
 {
@@ -28,10 +30,22 @@ namespace DaylightClassic.Options
             var method = attributes[0].method;
             return b =>
             {
-                method.Invoke(null, new object[] {b});
+                method.Invoke(null, new object[] { b });
             };
-                
 
+
+        }
+
+        public static void AddOptionsGroup(UIHelperBase helper, string groupName)
+        {
+            var group = helper.AddGroup(groupName);
+            var properties = typeof(Options).GetProperties();
+            foreach (var name in from property in properties select property.Name)
+            {
+                var description = OptionsHolder.Options.GetPropertyDescription(name);
+                group.AddCheckbox(description, name, OptionsHolder.Options.GetPropertyAction(name));
+
+            }
         }
     }
 }
