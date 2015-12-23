@@ -8,7 +8,7 @@ namespace DaylightClassic
         public override void OnLevelLoaded(LoadMode mode)
         {
             base.OnLevelLoaded(mode);
-            DaylightClassic.Reset();
+            DaylightClassic.Initialize();
             DaylightClassic.ReplaceFogEffect(OptionsHolder.Options.fogEffect);
             DaylightClassic.ReplaceSunlightColor(OptionsHolder.Options.sunlightColor);
             DaylightClassic.ReplaceSunlightIntensity(OptionsHolder.Options.sunlightIntensity);

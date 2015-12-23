@@ -49,10 +49,5 @@ namespace DaylightClassic
             }
             return null;
         }
-
-        public static bool InMenu()
-        {
-            return ToolManager.instance.m_properties.m_mode == ItemClass.Availability.None;
-        }
     }
 }

@@ -24,6 +24,7 @@ namespace DaylightClassic
 
         private const float IntensityClassic = 3.318695f * 3.318695f / 2.356273f;
         private static float _intensityAd = -1.0f;
+        private static bool _ingame;
 
         private static readonly Gradient ColorClassic = new Gradient()
         {
@@ -47,8 +48,15 @@ namespace DaylightClassic
 
         private static Gradient _colorAd;
 
+        public static void Initialize()
+        {
+            Reset();
+            _ingame = true;
+        }
+
         public static void Reset()
         {
+            _ingame = false;
             _europeanClassic = null;
             _tropicalClassic = null;
             _northClassic = null;
@@ -63,7 +71,7 @@ namespace DaylightClassic
 
         public static void ReplaceLuts(bool toClassic)
         {
-            if (Util.InMenu())
+            if (!_ingame)
             {
                 return;
             }
@@ -137,7 +145,7 @@ namespace DaylightClassic
 
         public static void ReplaceSunlightIntensity(bool toClassic)
         {
-            if (Util.InMenu())
+            if (!_ingame)
             {
                 return;
             }
@@ -151,7 +159,7 @@ namespace DaylightClassic
 
         public static void ReplaceSunlightColor(bool toClassic)
         {
-            if (Util.InMenu())
+            if (!_ingame)
             {
                 return;
             }
@@ -165,7 +173,7 @@ namespace DaylightClassic
 
         public static void ReplaceFogEffect(bool toClassic)
         {
-            if (Util.InMenu())
+            if (!_ingame)
             {
                 return;
             }
