@@ -1,10 +1,12 @@
 ﻿using DaylightClassic.Options;
 using ICities;
+using UnityEngine;
 
 namespace DaylightClassic
 {
     public class LoadingExtension : LoadingExtensionBase
     {
+
         public override void OnLevelLoaded(LoadMode mode)
         {
             base.OnLevelLoaded(mode);
@@ -14,6 +16,7 @@ namespace DaylightClassic
             DaylightClassic.ReplaceSunlightIntensity(OptionsHolder.Options.sunlightIntensity);
             DaylightClassic.ReplaceLuts(OptionsHolder.Options.stockLuts);
             DaylightClassic.ReplaceLatLong(OptionsHolder.Options.sunPosition);
+            DaylightClassic.ReplaceFogColor(OptionsHolder.Options.fogColor);
         }
 
         public override void OnLevelUnloading()
@@ -24,6 +27,7 @@ namespace DaylightClassic
             DaylightClassic.ReplaceSunlightIntensity(false);
             DaylightClassic.ReplaceLuts(false);
             DaylightClassic.ReplaceLatLong(false);
+            DaylightClassic.ReplaceFogColor(false);
             DaylightClassic.Reset();
         }
     }

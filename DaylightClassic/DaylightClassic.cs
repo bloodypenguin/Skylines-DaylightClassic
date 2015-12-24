@@ -1,5 +1,7 @@
 ﻿using ColossalFramework;
+using DaylightClassic.Options;
 using UnityEngine;
+using UnityEngine.Networking.Match;
 
 namespace DaylightClassic
 {
@@ -30,6 +32,9 @@ namespace DaylightClassic
         private static float _lonAd = -1.0f;
         private static float _latAd = -1.0f;
 
+        private static Color _skyTintAd = Color.clear;
+        private static Vector3 _waveLengthsAd;
+
         private static readonly Gradient ColorClassic = new Gradient()
         {
             colorKeys = new GradientColorKey[8]
@@ -55,11 +60,19 @@ namespace DaylightClassic
         public static void Initialize()
         {
             Reset();
+
+            var go = new GameObject("DaylightClassicProperties");
+            go.AddComponent<DaylightClassicProperties>();
             _ingame = true;
         }
 
         public static void Reset()
         {
+            var go = GameObject.FindObjectOfType<DaylightClassicProperties>();
+            if (go != null)
+            {
+                GameObject.Destroy(go);
+            }
             _ingame = false;
             _europeanClassic = null;
             _tropicalClassic = null;
@@ -72,6 +85,8 @@ namespace DaylightClassic
             _intensityAd = -1.0f;
             _lonAd = -1.0f;
             _latAd = -1.0f;
+            _skyTintAd = Color.clear;
+            _waveLengthsAd = Vector3.zero;
             //TODO(earalov): destroy textures?
         }
 
@@ -156,6 +171,8 @@ namespace DaylightClassic
                 return;
             }
             var prop = Object.FindObjectOfType<DayNightProperties>();
+
+
             if (_intensityAd < 0)
             {
                 _intensityAd = prop.m_SunIntensity;
@@ -250,6 +267,31 @@ namespace DaylightClassic
                 prop.m_Latitude = _latAd;
                 prop.m_Longitude = _lonAd;
             }
+        }
+
+        public static void ReplaceFogColor(bool toClassic)
+        {
+            if (!_ingame || OptionsHolder.Options.fogEffect)
+            {
+                return;
+            }
+            ReplaceFogColorImpl(toClassic);
+        }
+
+        internal static void ReplaceFogColorImpl(bool toClassic)
+        {
+            var prop = Object.FindObjectOfType<DayNightProperties>();
+            if (_skyTintAd == Color.clear)
+            {
+                _skyTintAd = prop.m_SkyTint;
+            }
+            if (_waveLengthsAd == Vector3.zero)
+            {
+                _waveLengthsAd = prop.m_WaveLengths;
+            }
+            var properties = GameObject.FindObjectOfType<DaylightClassicProperties>();
+            prop.m_SkyTint = toClassic ? properties.SkyTintClassic : _skyTintAd;
+            prop.m_WaveLengths = toClassic ? properties.WaveLengthsClassic : _waveLengthsAd;
         }
     }
 }

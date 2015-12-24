@@ -27,7 +27,7 @@ namespace DaylightClassic.Options
         public bool fogEffect { set; get; }
         [Checkbox("Classic sun position (not applicable to Boreal biome yet)", "DaylightClassic", "ReplaceLatLong")]
         public bool sunPosition { set; get; }
-        [Checkbox("[Not implemented yet] Classic fog color for AD fog & lighting effect")]
+        [Checkbox("Classic fog color for AD fog effect", "DaylightClassic", "ReplaceFogColor")]
         public bool fogColor { set; get; }
     }
 

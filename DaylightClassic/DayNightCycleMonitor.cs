@@ -1,15 +1,17 @@
 ﻿using ColossalFramework;
+using DaylightClassic.Options;
 using UnityEngine;
 
 namespace DaylightClassic
 {
     public class DayNightCycleMonitor : MonoBehaviour
     {
-        private static bool _previousState;
+        private bool _previousEffectState;
+        private bool _previousFogColorState;
+        private bool _initialized;
 
         public void Awake()
         {
-            _previousState = false;
             var dayNightEnabled = Singleton<SimulationManager>.instance.m_enableDayNight;
             SetUpEffects(dayNightEnabled);
         }
@@ -17,20 +19,20 @@ namespace DaylightClassic
         public void Update()
         {
             var dayNightEnabled = Singleton<SimulationManager>.instance.m_enableDayNight;
-            if (dayNightEnabled == _previousState)
+            if (dayNightEnabled == _previousEffectState && _previousFogColorState == OptionsHolder.Options.fogColor && _initialized)
             {
                 return;
             }
             SetUpEffects(dayNightEnabled);
+            _initialized = true;
         }
 
         public void OnDestroy()
         {
             SetUpEffects(true);
-            _previousState = false;
         }
 
-        private static void SetUpEffects(bool dayNightEnabled)
+        private void SetUpEffects(bool dayNightEnabled)
         {
             var behaviors = Camera.main.GetComponents<MonoBehaviour>();
             foreach (var behavior in behaviors)
@@ -38,13 +40,22 @@ namespace DaylightClassic
                 if (behavior is FogEffect)
                 {
                     behavior.enabled = !dayNightEnabled;
+                    if (behavior.enabled)
+                    {
+                        DaylightClassic.ReplaceFogColorImpl(false);
+                    }
                 }
                 if (behavior is DayNightFogEffect)
                 {
                     behavior.enabled = dayNightEnabled;
+                    if (behavior.enabled)
+                    {
+                        DaylightClassic.ReplaceFogColorImpl(OptionsHolder.Options.fogColor);                        
+                    }
                 }
             }
-            _previousState = dayNightEnabled;
+            _previousEffectState = dayNightEnabled;
+            _previousFogColorState = OptionsHolder.Options.fogColor;
         }
     }
 }
