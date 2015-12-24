@@ -49,5 +49,12 @@ namespace DaylightClassic
             }
             return null;
         }
+
+        public static string GetEnv()
+        {
+            var simulationManager = Singleton<SimulationManager>.instance;
+            var mMetaData = simulationManager?.m_metaData;
+            return mMetaData?.m_environment;
+        }
     }
 }

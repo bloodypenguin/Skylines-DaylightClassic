@@ -23,11 +23,11 @@ namespace DaylightClassic.Options
         public bool sunlightColor { set; get; }
         [Checkbox("Classic sunlight intensity", "DaylightClassic", "ReplaceSunlightIntensity")]
         public bool sunlightIntensity { set; get; }
-        [Checkbox("Classic for effect if day/night cycle is disabled", "DaylightClassic", "ReplaceFogEffect")]
+        [Checkbox("Classic fog effect if day/night cycle is disabled", "DaylightClassic", "ReplaceFogEffect")]
         public bool fogEffect { set; get; }
-        [Checkbox("[Not implemented yet] Classic sun position")]
+        [Checkbox("Classic sun position (not applicable to Boreal biome yet)", "DaylightClassic", "ReplaceLatLong")]
         public bool sunPosition { set; get; }
-        [Checkbox("[Not implemented yet] Classic fog color for AD fog effect")]
+        [Checkbox("[Not implemented yet] Classic fog color for AD fog & lighting effect")]
         public bool fogColor { set; get; }
     }
 

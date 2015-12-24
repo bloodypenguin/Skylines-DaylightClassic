@@ -22,9 +22,13 @@ namespace DaylightClassic
         private static Texture3DWrapper _northAd;
         private static Texture3DWrapper _tropicalAd;
 
-        private const float IntensityClassic = 3.318695f * 3.318695f / 2.356273f;
+        private const float IntensityClassic = 3.318695f;
+        private const float ExposureClassic = 1.0f;
         private static float _intensityAd = -1.0f;
+        private static float _exposureAd = -1.0f;
         private static bool _ingame;
+        private static float _lonAd = -1.0f;
+        private static float _latAd = -1.0f;
 
         private static readonly Gradient ColorClassic = new Gradient()
         {
@@ -66,6 +70,8 @@ namespace DaylightClassic
             _northAd = null;
             _sunnyAd = null;
             _intensityAd = -1.0f;
+            _lonAd = -1.0f;
+            _latAd = -1.0f;
             //TODO(earalov): destroy textures?
         }
 
@@ -154,7 +160,12 @@ namespace DaylightClassic
             {
                 _intensityAd = prop.m_SunIntensity;
             }
+            if (_exposureAd < 0)
+            {
+                _exposureAd = prop.m_Exposure;
+            }
             prop.m_SunIntensity = toClassic ? IntensityClassic : _intensityAd;
+            prop.m_Exposure = toClassic ? ExposureClassic : _exposureAd;
         }
 
         public static void ReplaceSunlightColor(bool toClassic)
@@ -168,7 +179,7 @@ namespace DaylightClassic
             {
                 _colorAd = prop.m_LightColor;
             }
-            prop.m_LightColor = toClassic? ColorClassic : _colorAd;
+            prop.m_LightColor = toClassic ? ColorClassic : _colorAd;
         }
 
         public static void ReplaceFogEffect(bool toClassic)
@@ -194,6 +205,51 @@ namespace DaylightClassic
                 }
             }
 
+        }
+
+        public static void ReplaceLatLong(bool toClassic)
+        {
+            if (!_ingame)
+            {
+                return;
+            }
+            var prop = Object.FindObjectOfType<DayNightProperties>();
+            if (_lonAd < 0.0f)
+            {
+                _lonAd = prop.m_Longitude;
+            }
+            if (_latAd < 0.0f)
+            {
+                _latAd = prop.m_Latitude;
+            }
+            var env = Util.GetEnv();
+            if (toClassic)
+            {
+                if (env == "Europe") //London
+                {
+                    prop.m_Latitude = 51.5072f;
+                    prop.m_Longitude = -0.1275f;
+                }
+                else if (env == "North")
+                {
+                    //TODO(earalov): rotate skybox
+                }
+                else if (env == "Sunny") //Malta
+                {
+                    prop.m_Latitude = 35.8833f;
+                    prop.m_Longitude = 14.5000f;
+                }
+                else if (env == "Tropical") //Mecca
+                {
+                    prop.m_Latitude = 21.4167f;
+                    prop.m_Longitude = 39.8167f;
+                }
+            }
+            else
+            {
+                prop.m_Latitude = _latAd;
+                prop.m_Longitude = _lonAd;
+            }
         }
     }
 }
