@@ -18,11 +18,11 @@ namespace DaylightClassic
 
         public void Update()
         {
-            var dayNightEnabled = Singleton<SimulationManager>.instance.m_enableDayNight;
-            if (dayNightEnabled == _previousEffectState && _previousFogColorState == OptionsHolder.Options.fogColor && _initialized)
-            {
-                return;
-            }
+            var dayNightEnabled = !OptionsHolder.Options.fogEffect;//Singleton<SimulationManager>.instance.m_enableDayNight;
+//            if (dayNightEnabled == _previousEffectState && _previousFogColorState == OptionsHolder.Options.fogColor && _initialized)
+//            {
+//                return;
+//            }
             SetUpEffects(dayNightEnabled);
             _initialized = true;
         }

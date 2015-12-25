@@ -33,6 +33,7 @@ namespace DaylightClassic
         private static float _latAd = -1.0f;
 
         private static Color _skyTintAd = Color.clear;
+        private static Color _groundColorAd = Color.clear;
         private static Vector3 _waveLengthsAd;
 
         private static readonly Gradient ColorClassic = new Gradient()
@@ -216,10 +217,10 @@ namespace DaylightClassic
             }
             else
             {
-                if (gameObject != null)
-                {
-                    Object.Destroy(gameObject);
-                }
+//                if (gameObject != null)
+//                {
+//                    Object.Destroy(gameObject);
+//                }
             }
 
         }
@@ -271,7 +272,7 @@ namespace DaylightClassic
 
         public static void ReplaceFogColor(bool toClassic)
         {
-            if (!_ingame || OptionsHolder.Options.fogEffect)
+            if (!_ingame /*|| OptionsHolder.Options.fogEffect*/)
             {
                 return;
             }
@@ -285,6 +286,10 @@ namespace DaylightClassic
             {
                 _skyTintAd = prop.m_SkyTint;
             }
+            if (_groundColorAd == Color.clear)
+            {
+                _groundColorAd = prop.m_GroundColor;
+            }
             if (_waveLengthsAd == Vector3.zero)
             {
                 _waveLengthsAd = prop.m_WaveLengths;
@@ -292,6 +297,7 @@ namespace DaylightClassic
             var properties = GameObject.FindObjectOfType<DaylightClassicProperties>();
             prop.m_SkyTint = toClassic ? properties.SkyTintClassic : _skyTintAd;
             prop.m_WaveLengths = toClassic ? properties.WaveLengthsClassic : _waveLengthsAd;
+            prop.m_GroundColor = toClassic ? properties.GroundColorClassic : _groundColorAd;
         }
     }
 }
