@@ -269,13 +269,14 @@ namespace DaylightClassic
             }
         }
 
-        public static void ReplaceFogColor(bool toClassic)
+        public static bool ReplaceFogColor(bool toClassic)
         {
             if (!_ingame || OptionsHolder.Options.fogEffect)
             {
-                return;
+                return false;
             }
             ReplaceFogColorImpl(toClassic);
+            return true;
         }
 
         internal static void ReplaceFogColorImpl(bool toClassic)
