@@ -23,9 +23,9 @@ namespace DaylightClassic
         public bool sunlightIntensity { set; get; }
         [Checkbox("Classic fog effect if day/night cycle is disabled", nameof(DaylightClassic), nameof(DaylightClassic.ReplaceFogEffect))]
         public bool fogEffect { set; get; }
-        [Checkbox("Classic sun position (not applicable to Boreal biome yet)", nameof(DaylightClassic), nameof(DaylightClassic.ReplaceLatLong))]
+        [Checkbox("Classic sun position (N/A for Boreal when classic fog enabled)", nameof(DaylightClassic), nameof(DaylightClassic.ReplaceLatLong))]
         public bool sunPosition { set; get; }
-        [Checkbox("Classic fog color for AD fog effect", "DaylightClassic", nameof(DaylightClassic), nameof(DaylightClassic.ReplaceFogColor))]
+        [Checkbox("Classic fog color for AD fog effect", nameof(DaylightClassic), nameof(DaylightClassic.ReplaceFogColor))]
         public bool fogColor { set; get; }
 
         [XmlIgnore]

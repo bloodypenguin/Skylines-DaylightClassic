@@ -251,7 +251,11 @@ namespace DaylightClassic
                     Object.Destroy(gameObject);
                 }
             }
-
+            var env = Util.GetEnv();
+            if (env == "North") //TODO(earalov): remove this line when found a way to move light source in Boreal
+            {
+                ReplaceLatLong(OptionsWrapper<Options>.Options.sunPosition);
+            }
         }
 
         public static void ReplaceLatLong(bool toClassic)
@@ -277,9 +281,19 @@ namespace DaylightClassic
                     prop.m_Latitude = 51.5072f;
                     prop.m_Longitude = -0.1275f;
                 }
-                else if (env == "North")
+                else if (env == "North") //Stockholm
                 {
-                    //TODO(earalov): rotate skybox
+                    if (OptionsWrapper<Options>.Options.fogEffect) //TODO(earalov): remove this line when found a way to move light source in Boreal
+                    {
+                        prop.m_Latitude = _latAd;
+                        prop.m_Longitude = _lonAd;
+                    }
+                    else
+                    {
+                        prop.m_Latitude = 59.3293f;
+                        prop.m_Longitude = 18.0686f;
+                    }
+
                 }
                 else if (env == "Sunny") //Malta
                 {
