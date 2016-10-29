@@ -1,5 +1,5 @@
 ﻿using ColossalFramework;
-using DaylightClassic.Options;
+using DaylightClassic.OptionsFramework;
 using UnityEngine;
 
 namespace DaylightClassic
@@ -19,7 +19,7 @@ namespace DaylightClassic
         public void Update()
         {
             var dayNightEnabled = Singleton<SimulationManager>.instance.m_enableDayNight;
-            if (dayNightEnabled == _previousEffectState && _previousFogColorState == OptionsHolder.Options.fogColor && _initialized)
+            if (dayNightEnabled == _previousEffectState && _previousFogColorState == OptionsWrapper<Options>.Options.fogColor && _initialized)
             {
                 return;
             }
@@ -50,12 +50,12 @@ namespace DaylightClassic
                     behavior.enabled = dayNightEnabled;
                     if (behavior.enabled)
                     {
-                        DaylightClassic.ReplaceFogColorImpl(OptionsHolder.Options.fogColor);                        
+                        DaylightClassic.ReplaceFogColorImpl(OptionsWrapper<Options>.Options.fogColor);                        
                     }
                 }
             }
             _previousEffectState = dayNightEnabled;
-            _previousFogColorState = OptionsHolder.Options.fogColor;
+            _previousFogColorState = OptionsWrapper<Options>.Options.fogColor;
         }
     }
 }

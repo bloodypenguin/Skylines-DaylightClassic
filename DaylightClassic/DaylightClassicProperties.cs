@@ -1,4 +1,4 @@
-﻿using DaylightClassic.Options;
+﻿using DaylightClassic.OptionsFramework;
 using UnityEngine;
 
 namespace DaylightClassic
@@ -22,7 +22,7 @@ namespace DaylightClassic
         {
             if (!_previousWaveLengths.Equals(WaveLengthsClassic) || !_previousSkyTint.Equals(SkyTintClassic))
             {
-                if (DaylightClassic.ReplaceFogColor(OptionsHolder.Options.fogColor))
+                if (DaylightClassic.ReplaceFogColor(OptionsWrapper<Options>.Options.fogColor))
                 {
                     _previousWaveLengths = WaveLengthsClassic;
                     _previousSkyTint = SkyTintClassic;

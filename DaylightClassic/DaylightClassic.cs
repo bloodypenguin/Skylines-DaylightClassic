@@ -1,5 +1,5 @@
 ﻿using ColossalFramework;
-using DaylightClassic.Options;
+using DaylightClassic.OptionsFramework;
 using UnityEngine;
 using UnityEngine.Networking.Match;
 
@@ -57,17 +57,23 @@ namespace DaylightClassic
 
         private static Gradient _colorAd;
 
+        private static GameObject _fogColorProperties;
+        private static DayNightProperties _dayNightProperties;
+
         public static void Initialize()
         {
             Reset();
 
-            var go = new GameObject("DaylightClassicProperties");
-            go.AddComponent<DaylightClassicProperties>();
+            _fogColorProperties = new GameObject("DaylightClassicProperties");
+            _fogColorProperties.AddComponent<DaylightClassicProperties>();
+            _dayNightProperties = Object.FindObjectOfType<DayNightProperties>();
             _ingame = true;
         }
 
         public static void Reset()
         {
+            _fogColorProperties = null;
+            _dayNightProperties = null;
             var go = GameObject.FindObjectOfType<DaylightClassicProperties>();
             if (go != null)
             {
@@ -271,7 +277,7 @@ namespace DaylightClassic
 
         public static bool ReplaceFogColor(bool toClassic)
         {
-            if (!_ingame || OptionsHolder.Options.fogEffect)
+            if (!_ingame || OptionsWrapper<Options>.Options.fogEffect)
             {
                 return false;
             }
@@ -281,18 +287,17 @@ namespace DaylightClassic
 
         internal static void ReplaceFogColorImpl(bool toClassic)
         {
-            var prop = Object.FindObjectOfType<DayNightProperties>();
             if (_skyTintAd == Color.clear)
             {
-                _skyTintAd = prop.m_SkyTint;
+                _skyTintAd = _dayNightProperties.m_SkyTint;
             }
             if (_waveLengthsAd == Vector3.zero)
             {
-                _waveLengthsAd = prop.m_WaveLengths;
+                _waveLengthsAd = _dayNightProperties.m_WaveLengths;
             }
-            var properties = GameObject.FindObjectOfType<DaylightClassicProperties>();
-            prop.m_SkyTint = toClassic ? properties.SkyTintClassic : _skyTintAd;
-            prop.m_WaveLengths = toClassic ? properties.WaveLengthsClassic : _waveLengthsAd;
+            var properties = _fogColorProperties.GetComponent<DaylightClassicProperties>();
+            _dayNightProperties.m_SkyTint = toClassic ? properties.SkyTintClassic : _skyTintAd;
+            _dayNightProperties.m_WaveLengths = toClassic ? properties.WaveLengthsClassic : _waveLengthsAd;
         }
     }
 }

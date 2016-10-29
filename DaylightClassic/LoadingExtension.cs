@@ -1,4 +1,4 @@
-﻿using DaylightClassic.Options;
+﻿using DaylightClassic.OptionsFramework;
 using ICities;
 using UnityEngine;
 
@@ -11,12 +11,12 @@ namespace DaylightClassic
         {
             base.OnLevelLoaded(mode);
             DaylightClassic.Initialize();
-            DaylightClassic.ReplaceFogEffect(OptionsHolder.Options.fogEffect);
-            DaylightClassic.ReplaceSunlightColor(OptionsHolder.Options.sunlightColor);
-            DaylightClassic.ReplaceSunlightIntensity(OptionsHolder.Options.sunlightIntensity);
-            DaylightClassic.ReplaceLuts(OptionsHolder.Options.stockLuts);
-            DaylightClassic.ReplaceLatLong(OptionsHolder.Options.sunPosition);
-            DaylightClassic.ReplaceFogColor(OptionsHolder.Options.fogColor);
+            DaylightClassic.ReplaceFogEffect(OptionsWrapper<Options>.Options.fogEffect);
+            DaylightClassic.ReplaceSunlightColor(OptionsWrapper<Options>.Options.sunlightColor);
+            DaylightClassic.ReplaceSunlightIntensity(OptionsWrapper<Options>.Options.sunlightIntensity);
+            DaylightClassic.ReplaceLuts(OptionsWrapper<Options>.Options.stockLuts);
+            DaylightClassic.ReplaceLatLong(OptionsWrapper<Options>.Options.sunPosition);
+            DaylightClassic.ReplaceFogColor(OptionsWrapper<Options>.Options.fogColor);
         }
 
         public override void OnLevelUnloading()
