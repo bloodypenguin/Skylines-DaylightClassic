@@ -28,7 +28,7 @@ namespace DaylightClassic
                     _previousSkyTint = SkyTintClassic;
                 }
             }
-            #if DEBUG
+#if DEBUG
             if ((!Input.GetKey(KeyCode.RightShift) && !Input.GetKey(KeyCode.LeftShift)) || !Input.GetKeyDown(KeyCode.E))
             {
                 return;
@@ -37,7 +37,7 @@ namespace DaylightClassic
             var newState = !previousState;
             DaylightClassic.ReplaceFogEffect(newState);
             OptionsHolder.Options.fogEffect = newState;
-            #endif
+#endif
         }
     }
 }

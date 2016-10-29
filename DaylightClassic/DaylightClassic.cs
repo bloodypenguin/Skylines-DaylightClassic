@@ -60,6 +60,30 @@ namespace DaylightClassic
         private static GameObject _fogColorProperties;
         private static DayNightProperties _dayNightProperties;
 
+        public static Color SkyTintAd
+        {
+            get
+            {
+                if (_skyTintAd == Color.clear)
+                {
+                    _skyTintAd = _dayNightProperties.m_SkyTint;
+                }
+                return _skyTintAd;
+            }
+        }
+
+        public static Vector3 WaveLengthsAd
+        {
+            get
+            {
+                if (_waveLengthsAd == Vector3.zero)
+                {
+                    _waveLengthsAd = _dayNightProperties.m_WaveLengths;
+                }
+                return _waveLengthsAd;
+            }
+        }
+
         public static void Initialize()
         {
             Reset();
@@ -287,17 +311,9 @@ namespace DaylightClassic
 
         internal static void ReplaceFogColorImpl(bool toClassic)
         {
-            if (_skyTintAd == Color.clear)
-            {
-                _skyTintAd = _dayNightProperties.m_SkyTint;
-            }
-            if (_waveLengthsAd == Vector3.zero)
-            {
-                _waveLengthsAd = _dayNightProperties.m_WaveLengths;
-            }
             var properties = _fogColorProperties.GetComponent<DaylightClassicProperties>();
-            _dayNightProperties.m_SkyTint = toClassic ? properties.SkyTintClassic : _skyTintAd;
-            _dayNightProperties.m_WaveLengths = toClassic ? properties.WaveLengthsClassic : _waveLengthsAd;
+            _dayNightProperties.m_SkyTint = toClassic ? properties.SkyTintClassic : SkyTintAd;
+            _dayNightProperties.m_WaveLengths = toClassic ? properties.WaveLengthsClassic : WaveLengthsAd;
         }
     }
 }
