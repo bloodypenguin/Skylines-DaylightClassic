@@ -1,4 +1,7 @@
-﻿using DaylightClassic.OptionsFramework;
+﻿using System.Collections.Generic;
+using System.Linq;
+using ColossalFramework.UI;
+using DaylightClassic.OptionsFramework;
 using ICities;
 
 namespace DaylightClassic
@@ -10,7 +13,22 @@ namespace DaylightClassic
 
         public void OnSettingsUI(UIHelperBase helper)
         {
-            helper.AddOptionsGroup<Options>();
+            var components =  helper.AddOptionsGroup<Options>();
+            var checkBoxes = components.OfType<UICheckBox>().ToArray();
+            helper.AddButton("All to Classic", () =>
+            {
+                foreach (var uiCheckBox in checkBoxes)
+                {
+                    uiCheckBox.isChecked = true;
+                }
+            });
+            helper.AddButton("All to After Dark", () =>
+            {
+                foreach (var uiCheckBox in checkBoxes)
+                {
+                    uiCheckBox.isChecked = false;
+                }
+            });
         }
     }
 }

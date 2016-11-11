@@ -25,7 +25,7 @@ namespace DaylightClassic
         public bool fogEffect { set; get; }
         [Checkbox("Classic sun position (N/A for Boreal when classic fog enabled)", nameof(DaylightClassic), nameof(DaylightClassic.ReplaceLatLong))]
         public bool sunPosition { set; get; }
-        [Checkbox("Classic fog color for AD fog effect", nameof(DaylightClassic), nameof(DaylightClassic.ReplaceFogColor))]
+        [Checkbox("Classic fog color for post-AD fog effect", nameof(DaylightClassic), nameof(DaylightClassic.ReplaceFogColor))]
         public bool fogColor { set; get; }
 
         [XmlIgnore]

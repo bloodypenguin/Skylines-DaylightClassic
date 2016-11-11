@@ -13,16 +13,19 @@ namespace DaylightClassic
         private const string Sunny = "LUTSunny";
         private const string North = "LUTNorth";
         private const string Tropical = "LUTTropical";
+        private const string Winter = "LUTWinter";
 
         private static Texture3DWrapper _europeanClassic;
         private static Texture3DWrapper _sunnyClassic;
         private static Texture3DWrapper _northClassic;
         private static Texture3DWrapper _tropicalClassic;
+        private static Texture3DWrapper _winterClassic;
 
         private static Texture3DWrapper _europeanAd;
         private static Texture3DWrapper _sunnyAd;
         private static Texture3DWrapper _northAd;
         private static Texture3DWrapper _tropicalAd;
+        private static Texture3DWrapper _winterAd;
 
         private const float IntensityClassic = 3.318695f;
         private const float ExposureClassic = 1.0f;
@@ -108,10 +111,12 @@ namespace DaylightClassic
             _tropicalClassic = null;
             _northClassic = null;
             _sunnyClassic = null;
+            _winterClassic = null;
             _europeanAd = null;
             _tropicalAd = null;
             _northAd = null;
             _sunnyAd = null;
+            _winterAd = null;
             _intensityAd = -1.0f;
             _lonAd = -1.0f;
             _latAd = -1.0f;
@@ -126,72 +131,88 @@ namespace DaylightClassic
             {
                 return;
             }
-            var renderProperties = Object.FindObjectOfType<RenderProperties>();
             for (var i = 0; i < ColorCorrectionManager.instance.m_BuiltinLUTs.Length; i++)
             {
-                var builtinLutName = ColorCorrectionManager.instance.m_BuiltinLUTs[i].name;
-                var builtinLut = ColorCorrectionManager.instance.m_BuiltinLUTs[i];
-                Texture3DWrapper replacement;
-                switch (builtinLutName)
+                var replacement1 = GetReplacementLut(toClassic,
+                    ColorCorrectionManager.instance.m_BuiltinLUTs[i].name,
+                    ColorCorrectionManager.instance.m_BuiltinLUTs[i]);
+                if (replacement1 == null)
                 {
-                    case Europe:
-                        if (_europeanAd == null)
-                        {
-                            _europeanAd = builtinLut;
-                        }
-                        if (_europeanClassic == null)
-                        {
-                            _europeanClassic = Util.LoadTexture("DaylightClassic.lut.EuropeanClassic.png", Europe);
-                        }
-                        replacement = toClassic ? _europeanClassic : _europeanAd;
-                        break;
-                    case Tropical:
-                        if (_tropicalAd == null)
-                        {
-                            _tropicalAd = builtinLut;
-                        }
-                        if (_tropicalClassic == null)
-                        {
-                            _tropicalClassic = Util.LoadTexture("DaylightClassic.lut.TropicalClassic.png", Tropical);
-                        }
-                        replacement = toClassic ? _tropicalClassic : _tropicalAd;
-                        break;
-                    case North:
-                        if (_northAd == null)
-                        {
-                            _northAd = builtinLut;
-                        }
-                        if (_northClassic == null)
-                        {
-                            _northClassic = Util.LoadTexture("DaylightClassic.lut.BorealClassic.png", North);
-                        }
-                        replacement = toClassic ? _northClassic : _northAd;
-                        break;
-                    case Sunny:
-                        if (_sunnyAd == null)
-                        {
-                            _sunnyAd = builtinLut;
-                        }
-                        if (_sunnyClassic == null)
-                        {
-                            _sunnyClassic = Util.LoadTexture("DaylightClassic.lut.TemperateClassic.png", Sunny);
-                        }
-                        replacement = toClassic ? _sunnyClassic : _sunnyAd;
-                        break;
-                    default:
-                        continue;
+                    continue;
                 }
-                if (builtinLutName == renderProperties.m_ColorCorrectionLUT.name)
-                {
-                    renderProperties.m_ColorCorrectionLUT = replacement;
-                }
-                ColorCorrectionManager.instance.m_BuiltinLUTs[i] = replacement;
+                ColorCorrectionManager.instance.m_BuiltinLUTs[i] = replacement1;
             }
-
+            var renderProperties = Object.FindObjectOfType<RenderProperties>();
+            var replacement2 = GetReplacementLut(toClassic,
+                renderProperties.m_ColorCorrectionLUT.name,
+                renderProperties.m_ColorCorrectionLUT);
+            if (replacement2 != null)
+            {
+                renderProperties.m_ColorCorrectionLUT = replacement2;
+            }
             var size = ColorCorrectionManager.instance.items.Length;
             var lastSelection = ColorCorrectionManager.instance.lastSelection;
             ColorCorrectionManager.instance.currentSelection = (lastSelection + 1) % size;
             ColorCorrectionManager.instance.currentSelection = lastSelection;
+        }
+
+        private static Texture3DWrapper GetReplacementLut(bool toClassic, string builtinLutName, Texture3DWrapper builtinLut)
+        {
+            switch (builtinLutName)
+            {
+                case Europe:
+                    if (_europeanAd == null)
+                    {
+                        _europeanAd = builtinLut;
+                    }
+                    if (_europeanClassic == null)
+                    {
+                        _europeanClassic = Util.LoadTexture("DaylightClassic.lut.EuropeanClassic.png", Europe);
+                    }
+                    return toClassic ? _europeanClassic : _europeanAd;
+                case Tropical:
+                    if (_tropicalAd == null)
+                    {
+                        _tropicalAd = builtinLut;
+                    }
+                    if (_tropicalClassic == null)
+                    {
+                        _tropicalClassic = Util.LoadTexture("DaylightClassic.lut.TropicalClassic.png", Tropical);
+                    }
+                    return toClassic ? _tropicalClassic : _tropicalAd;
+                case North:
+                    if (_northAd == null)
+                    {
+                        _northAd = builtinLut;
+                    }
+                    if (_northClassic == null)
+                    {
+                        _northClassic = Util.LoadTexture("DaylightClassic.lut.BorealClassic.png", North);
+                    }
+                    return toClassic ? _northClassic : _northAd;
+                case Sunny:
+                    if (_sunnyAd == null)
+                    {
+                        _sunnyAd = builtinLut;
+                    }
+                    if (_sunnyClassic == null)
+                    {
+                        _sunnyClassic = Util.LoadTexture("DaylightClassic.lut.TemperateClassic.png", Sunny);
+                    }
+                    return toClassic ? _sunnyClassic : _sunnyAd;
+                case Winter:
+                    if (_winterAd == null)
+                    {
+                        _winterAd = builtinLut;
+                    }
+                    if (_winterClassic == null)
+                    {
+                        _winterClassic = Util.LoadTexture("DaylightClassic.lut.WinterClassic.png", Winter);
+                    }
+                    return toClassic ? _winterClassic : _winterAd;
+                default:
+                    return null;
+            }
         }
 
         public static void ReplaceSunlightIntensity(bool toClassic)
