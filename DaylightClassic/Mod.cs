@@ -15,14 +15,16 @@ namespace DaylightClassic
         {
             var components =  helper.AddOptionsGroup<Options>();
             var checkBoxes = components.OfType<UICheckBox>().ToArray();
-            helper.AddButton("All to Classic", () =>
+            var group = helper.AddGroup("Quick selection");
+
+            group.AddButton("All to Classic", () =>
             {
                 foreach (var uiCheckBox in checkBoxes)
                 {
                     uiCheckBox.isChecked = true;
                 }
             });
-            helper.AddButton("All to After Dark", () =>
+            group.AddButton("All to After Dark", () =>
             {
                 foreach (var uiCheckBox in checkBoxes)
                 {
