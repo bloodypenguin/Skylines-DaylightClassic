@@ -187,7 +187,6 @@ namespace DaylightClassic.TranslationFramework
                 if (HasTranslation(translationId))
                 {
                     translatedText = _currentLanguage._conversionDictionary[translationId];
-                    UnityEngine.Debug.Log("Returned translation for language \"" + _currentLanguage._uniqueName + "\" is returning \"" + translatedText + "\" for \"" + translationId + "\"");
                 }
                 else
                 {
