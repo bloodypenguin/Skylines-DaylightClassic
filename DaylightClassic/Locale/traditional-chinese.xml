@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Language UniqueName="zh" ReadableName="正體中文" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Translations>
+    <Translation ID="DC_DESCRIPTION" String="带来经典白色日光色" />
+    <!-- OPTIONS -->
+    <Translation ID="DC_OPTIONS_BASIC" String="基础功能（人人可使用）" />
+    <Translation ID="DC_OPTIONS_ADVANCED" String="高级功能（容易出错误）" />
+    <Translation ID="DC_OPTION_LUTS" String="自带滤镜" />
+    <Translation ID="DC_OPTION_SUN_COLOR" String="经典日光色彩" />
+    <Translation ID="DC_OPTION_SUN_INTENSITY" String="经典日光强度" />
+    <Translation ID="DC_OPTION_SUN_POSITION" String="经典太阳位置 (N/A 为寒带时，经典的雾效果将启用)" />
+    <Translation ID="DC_OPTION_FOG_EFFECT" String="经典雾效果 (只能在关闭昼夜循环时使用)" />
+    <Translation ID="DC_OPTION_FOG_COLOR" String="经典夜间雾效果色彩 (副作用：减少日落时的丰富色彩)" />
+    <!-- ACTIONS -->
+    <Translation ID="DC_ACTIONS_SHORTCUTS" String="快速选择" />
+    <Translation ID="DC_ACTION_TO_CLASSIC" String="所有到经典" />
+    <Translation ID="DC_ACTION_TO_AD" String="所有到香草" />
+  </Translations>
+</Language>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Language UniqueName="en" ReadableName="English" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Translations>
+    <Translation ID="DC_DESCRIPTION" String="Brings back classic white daylight color" />
+	<!-- OPTIONS -->
+		<Translation ID="DC_OPTIONS_BASIC" String="Basic features (recommened for everyone)" />
+		<Translation ID="DC_OPTIONS_ADVANCED" String="Advanced features (side effects possible)" />
+		<Translation ID="DC_OPTION_LUTS" String="Classic stock LUTs" />
+		<Translation ID="DC_OPTION_SUN_COLOR" String="Classic sunlight color" />
+		<Translation ID="DC_OPTION_SUN_INTENSITY" String="Classic sunlight intensity" />
+		<Translation ID="DC_OPTION_SUN_POSITION" String="Classic sun position (N/A for Boreal when classic fog effect enabled)" />
+		<Translation ID="DC_OPTION_FOG_EFFECT" String="Classic fog effect (works only if day/night cycle is disabled)" />
+		<Translation ID="DC_OPTION_FOG_COLOR" String="Classic fog color for AD fog effect (side effect: makes sunsets less colorful)" />
+  <!-- ACTIONS -->
+  	<Translation ID="DC_ACTIONS_SHORTCUTS" String="Quick selection" />
+    <Translation ID="DC_ACTION_TO_CLASSIC" String="All to Classic" />
+    <Translation ID="DC_ACTION_TO_AD" String="All to After Dark" />
+  </Translations>
+</Language>

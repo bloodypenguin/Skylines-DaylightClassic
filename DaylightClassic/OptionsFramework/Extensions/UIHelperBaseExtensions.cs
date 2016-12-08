@@ -12,18 +12,18 @@ namespace DaylightClassic.OptionsFramework.Extensions
 {
     public static class UIHelperBaseExtensions
     {
-        public static IEnumerable<UIComponent> AddOptionsGroup<T>(this UIHelperBase helper)
+        public static IEnumerable<UIComponent> AddOptionsGroup<T>(this UIHelperBase helper, Func<string, string> translator = null)
         {
             var result = new List<UIComponent>();
-            var properties = (from property in typeof(T).GetProperties() select property.Name).Where(name => name != "FileName");
+            var properties = from property in typeof(T).GetProperties() select property.Name;
             var groups = new Dictionary<string, UIHelperBase>();
-            foreach (var propertyName in properties)
+            foreach (var propertyName in properties.ToArray())
             {
                 var description = OptionsWrapper<T>.Options.GetPropertyDescription(propertyName);
                 var groupName = OptionsWrapper<T>.Options.GetPropertyGroup(propertyName);
                 if (groupName == null)
                 {
-                    var component = helper.ProcessProperty<T>(propertyName, description);
+                    var component = helper.ProcessProperty<T>(propertyName, description, translator);
                     if (component != null)
                     {
                         result.Add(component);
@@ -31,11 +31,15 @@ namespace DaylightClassic.OptionsFramework.Extensions
                 }
                 else
                 {
+                    if (translator != null)
+                    {
+                        groupName = translator.Invoke(groupName);
+                    }
                     if (!groups.ContainsKey(groupName))
                     {
                         groups[groupName] = helper.AddGroup(groupName);
                     }
-                    var component = groups[groupName].ProcessProperty<T>(propertyName, description);
+                    var component = groups[groupName].ProcessProperty<T>(propertyName, description, translator);
                     if (component != null)
                     {
                         result.Add(component);
@@ -45,27 +49,32 @@ namespace DaylightClassic.OptionsFramework.Extensions
             return result;
         }
 
-        private static UIComponent ProcessProperty<T>(this UIHelperBase group, string name, string description)
+        private static UIComponent ProcessProperty<T>(this UIHelperBase group, string propertyName, string description, Func<string, string> translator = null)
         {
-            var checkboxAttribute = OptionsWrapper<T>.Options.GetAttribute<T, CheckboxAttribute>(name);
+            if (translator != null)
+            {
+                description = translator.Invoke(description);
+            }
+
+            var checkboxAttribute = OptionsWrapper<T>.Options.GetAttribute<T, CheckboxAttribute>(propertyName);
             if (checkboxAttribute != null)
             {
-                return group.AddCheckbox<T>(description, name, checkboxAttribute);
+                return group.AddCheckbox<T>(description, propertyName, checkboxAttribute);
             }
-            var textfieldAttribute = OptionsWrapper<T>.Options.GetAttribute<T, TextfieldAttribute>(name);
+            var textfieldAttribute = OptionsWrapper<T>.Options.GetAttribute<T, TextfieldAttribute>(propertyName);
             if (textfieldAttribute != null)
             {
-                return group.AddTextfield<T>(description, name, textfieldAttribute);
+                return group.AddTextfield<T>(description, propertyName, textfieldAttribute);
             }
-            var dropDownAttribute = OptionsWrapper<T>.Options.GetAttribute<T, DropDownAttribute>(name);
+            var dropDownAttribute = OptionsWrapper<T>.Options.GetAttribute<T, DropDownAttribute>(propertyName);
             if (dropDownAttribute != null)
             {
-                return group.AddDropdown<T>(description, name, dropDownAttribute);
+                return group.AddDropdown<T>(description, propertyName, dropDownAttribute);
             }
-            var sliderAttribute = OptionsWrapper<T>.Options.GetAttribute<T, SliderAttribute>(name);
+            var sliderAttribute = OptionsWrapper<T>.Options.GetAttribute<T, SliderAttribute>(propertyName);
             if (sliderAttribute != null)
             {
-                return group.AddSlider<T>(description, name, sliderAttribute);
+                return group.AddSlider<T>(description, propertyName, sliderAttribute);
             }
             //TODO: more control types
             return null;
