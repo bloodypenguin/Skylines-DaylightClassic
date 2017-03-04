@@ -77,7 +77,9 @@
     <Content Include="Locale\russian.xml">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="Locale\chinese.xml" />
     <Content Include="Locale\simplified-chinese.xml" />
+    <Content Include="Locale\traditional-chinese.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
