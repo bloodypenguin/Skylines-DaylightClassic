@@ -19,7 +19,8 @@ namespace DaylightClassic
         public void Update()
         {
             var dayNightEnabled = Singleton<SimulationManager>.instance.m_enableDayNight;
-            if (dayNightEnabled == _previousEffectState && _previousFogColorState == OptionsWrapper<Options>.Options.fogColor && _initialized)
+            if (dayNightEnabled == _previousEffectState && _previousFogColorState ==
+                OptionsWrapper<Options>.Options.fogColor && _initialized)
             {
                 return;
             }
@@ -34,23 +35,32 @@ namespace DaylightClassic
 
         private void SetUpEffects(bool dayNightEnabled)
         {
-            var behaviors = Camera.main.GetComponents<MonoBehaviour>();
+            var behaviors = Camera.main?.GetComponents<MonoBehaviour>();
+            if (behaviors == null)
+            {
+                return;
+            }
             foreach (var behavior in behaviors)
             {
-                if (behavior is FogEffect)
+                switch (behavior)
                 {
-                    behavior.enabled = !dayNightEnabled;
-                    if (behavior.enabled)
+                    case FogEffect fe:
                     {
-                        DaylightClassic.ReplaceFogColorImpl(false);
+                        fe.enabled = !dayNightEnabled;
+                        if (fe.enabled)
+                        {
+                            DaylightClassic.ReplaceFogColorImpl(false);
+                        }
+                        break;
                     }
-                }
-                if (behavior is DayNightFogEffect)
-                {
-                    behavior.enabled = dayNightEnabled;
-                    if (behavior.enabled)
+                    case DayNightFogEffect dnfe:
                     {
-                        DaylightClassic.ReplaceFogColorImpl(OptionsWrapper<Options>.Options.fogColor);                        
+                        dnfe.enabled = dayNightEnabled;
+                        if (dnfe.enabled)
+                        {
+                            DaylightClassic.ReplaceFogColorImpl(OptionsWrapper<Options>.Options.fogColor);
+                        }
+                        break;
                     }
                 }
             }
