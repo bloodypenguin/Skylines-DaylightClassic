@@ -338,7 +338,15 @@ namespace DaylightClassic
 
         internal static void ReplaceFogColorImpl(bool toClassic)
         {
+            if (_dayNightProperties == null || _fogColorProperties == null)
+            {
+                return;
+            }
             var properties = _fogColorProperties.GetComponent<DaylightClassicProperties>();
+            if (properties == null && toClassic)
+            {
+                return;
+            }
             _dayNightProperties.m_SkyTint = toClassic ? properties.SkyTintClassic : SkyTintAd;
             _dayNightProperties.m_WaveLengths = toClassic ? properties.WaveLengthsClassic : WaveLengthsAd;
         }
