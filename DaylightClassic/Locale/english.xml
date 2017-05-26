@@ -8,7 +8,7 @@
 		<Translation ID="DC_OPTION_LUTS" String="Classic stock LUTs" />
 		<Translation ID="DC_OPTION_SUN_COLOR" String="Classic sunlight color" />
 		<Translation ID="DC_OPTION_SUN_INTENSITY" String="Classic sunlight intensity" />
-		<Translation ID="DC_OPTION_SUN_POSITION" String="Classic sun position (N/A for Boreal when classic fog effect enabled)" />
+		<Translation ID="DC_OPTION_SUN_POSITION" String="Classic sun position" />
 		<Translation ID="DC_OPTION_FOG_EFFECT" String="Classic fog effect (works only if day/night cycle is disabled)" />
 		<Translation ID="DC_OPTION_FOG_COLOR" String="Classic fog color for AD fog effect (side effect: makes sunsets less colorful)" />
   <!-- ACTIONS -->

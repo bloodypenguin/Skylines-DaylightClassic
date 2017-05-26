@@ -8,7 +8,7 @@
     <Translation ID="DC_OPTION_LUTS" String="Классические стандартные LUT" />
     <Translation ID="DC_OPTION_SUN_COLOR" String="Классический цвет дневного света" />
     <Translation ID="DC_OPTION_SUN_INTENSITY" String="Классическая яркость дневного света" />
-    <Translation ID="DC_OPTION_SUN_POSITION" String="Классические долгота/широта (Недоступно для Севера при включенном классическом эффекте)" />
+    <Translation ID="DC_OPTION_SUN_POSITION" String="Классические долгота/широта" />
     <Translation ID="DC_OPTION_FOG_EFFECT" String="Классический эффект тумана (Опция действует только при выключенном дневном цикле)" />
     <Translation ID="DC_OPTION_FOG_COLOR" String="Классический цвет тумана для нового эффекта" />
     <!-- ACTIONS -->
