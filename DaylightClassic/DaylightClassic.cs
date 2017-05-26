@@ -328,7 +328,7 @@ namespace DaylightClassic
 
         public static bool ReplaceFogColor(bool toClassic)
         {
-            if (!_ingame || OptionsWrapper<Options>.Options.fogEffect)
+            if (!_ingame || OptionsWrapper<Options>.Options.FogEffect)
             {
                 return false;
             }

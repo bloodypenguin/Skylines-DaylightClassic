@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
+using ColossalFramework.Plugins;
 using ColossalFramework.UI;
 using DaylightClassic.OptionsFramework.Attibutes;
 using ICities;
@@ -15,7 +17,17 @@ namespace DaylightClassic.OptionsFramework.Extensions
         public static IEnumerable<UIComponent> AddOptionsGroup<T>(this UIHelperBase helper, Func<string, string> translator = null)
         {
             var result = new List<UIComponent>();
-            var properties = from property in typeof(T).GetProperties() select property.Name;
+            var properties = from property in typeof(T).GetProperties().Where(p =>
+            {
+                var attributes =
+                    (AbstractOptionsAttribute[])p.GetCustomAttributes(typeof(AbstractOptionsAttribute), false);
+                return attributes.Any();
+            }).Where(p =>
+            {
+                var attributes =
+                    (HideConditionAttribute[])p.GetCustomAttributes(typeof(HideConditionAttribute), false);
+                return !attributes.Any(a => a.IsHidden());
+            }) select property.Name;
             var groups = new Dictionary<string, UIHelperBase>();
             foreach (var propertyName in properties.ToArray())
             {
@@ -55,48 +67,65 @@ namespace DaylightClassic.OptionsFramework.Extensions
             {
                 description = translator.Invoke(description);
             }
-
+            UIComponent component = null;
             var checkboxAttribute = OptionsWrapper<T>.Options.GetAttribute<T, CheckboxAttribute>(propertyName);
             if (checkboxAttribute != null)
             {
-                return group.AddCheckbox<T>(description, propertyName, checkboxAttribute);
+                component = group.AddCheckbox<T>(description, propertyName, checkboxAttribute);
             }
             var textfieldAttribute = OptionsWrapper<T>.Options.GetAttribute<T, TextfieldAttribute>(propertyName);
             if (textfieldAttribute != null)
             {
-                return group.AddTextfield<T>(description, propertyName, textfieldAttribute);
+                component = group.AddTextfield<T>(description, propertyName, textfieldAttribute);
             }
             var dropDownAttribute = OptionsWrapper<T>.Options.GetAttribute<T, DropDownAttribute>(propertyName);
             if (dropDownAttribute != null)
             {
-                return group.AddDropdown<T>(description, propertyName, dropDownAttribute);
+                component = group.AddDropdown<T>(description, propertyName, dropDownAttribute, translator);
             }
             var sliderAttribute = OptionsWrapper<T>.Options.GetAttribute<T, SliderAttribute>(propertyName);
             if (sliderAttribute != null)
             {
-                return group.AddSlider<T>(description, propertyName, sliderAttribute);
+                component = group.AddSlider<T>(description, propertyName, sliderAttribute);
+            }
+            var buttonAttribute = OptionsWrapper<T>.Options.GetAttribute<T, ButtonAttribute>(propertyName);
+            if (buttonAttribute != null)
+            {
+                component = group.AddButton<T>(description, buttonAttribute);
+            }
+            var labelAttribute = OptionsWrapper<T>.Options.GetAttribute<T, LabelAttribute>(propertyName);
+            if (labelAttribute != null)
+            {
+                component = group.AddLabel<T>(description);
             }
             //TODO: more control types
-            return null;
+
+            var descriptionAttribute = OptionsWrapper<T>.Options.GetAttribute<T, DescriptionAttribute>(propertyName);
+            if (component != null && descriptionAttribute != null)
+            {
+                component.tooltip = (translator == null || descriptionAttribute is DontTranslateDescriptionAttribute) ? descriptionAttribute.Description : translator.Invoke(descriptionAttribute.Description);
+            }
+            return component;
         }
 
-        private static UIDropDown AddDropdown<T>(this UIHelperBase group, string text, string propertyName, DropDownAttribute attr)
+        private static UIDropDown AddDropdown<T>(this UIHelperBase group, string text, string propertyName, DropDownAttribute attr, Func<string, string> translator = null)
         {
             var property = typeof(T).GetProperty(propertyName);
             var defaultCode = (int)property.GetValue(OptionsWrapper<T>.Options, null);
             int defaultSelection;
+            var items = attr.GetItems(translator);
             try
             {
-                defaultSelection = attr.Items.First(kvp => kvp.Value == defaultCode).Value;
+                defaultSelection = items.First(kvp => kvp.Value == defaultCode).Value;
             }
             catch
             {
                 defaultSelection = 0;
-                property.SetValue(OptionsWrapper<T>.Options, attr.Items.First().Value, null);
+                property.SetValue(OptionsWrapper<T>.Options, items.First().Value, null);
             }
-            return (UIDropDown)group.AddDropdown(text, attr.Items.Select(kvp => kvp.Key).ToArray(), defaultSelection, sel =>
+            return (UIDropDown)group.AddDropdown(text, items.Select(kvp => kvp.Key).ToArray(), defaultSelection, sel =>
            {
-               var code = attr.Items[sel].Value;
+               var code = items[sel].Value;
                property.SetValue(OptionsWrapper<T>.Options, code, null);
                OptionsWrapper<T>.SaveOptions();
                attr.Action<int>().Invoke(code);
@@ -113,6 +142,25 @@ namespace DaylightClassic.OptionsFramework.Extensions
                     OptionsWrapper<T>.SaveOptions();
                     attr.Action<bool>().Invoke(b);
                 });
+        }
+
+        private static UIButton AddButton<T>(this UIHelperBase group, string text, ButtonAttribute attr)
+        {
+            return (UIButton)group.AddButton(text, ()=> 
+                {
+                    attr.Action().Invoke();
+                });
+        }
+
+        private static UILabel AddLabel<T>(this UIHelperBase group, string text)
+        {
+            var space = (UIPanel)group.AddSpace(20);
+            var valueLabel = space.AddUIComponent<UILabel>();
+            valueLabel.AlignTo(space, UIAlignAnchor.TopLeft);
+            valueLabel.relativePosition = new Vector3(0, 0, 0);
+            valueLabel.text = text;
+            valueLabel.Show();
+            return valueLabel;
         }
 
         private static UITextField AddTextfield<T>(this UIHelperBase group, string text, string propertyName, TextfieldAttribute attr)
@@ -165,11 +213,39 @@ namespace DaylightClassic.OptionsFramework.Extensions
                 }
             }
 
+            float finalValue;
+            var value = property.GetValue(OptionsWrapper<T>.Options, null);
+            if (value is float)
+            {
+                finalValue = (float)value;
+            } else if (value is byte)
+            {
+                finalValue = (byte) value;
+            }
+            else if (value is int)
+            {
+                finalValue = (int)value;
+            }
+            else
+            {
+                throw new Exception("Unsupported numeric type for slider!");
+            }
 
-            var slider = (UISlider)group.AddSlider(text, attr.Min, attr.Max, attr.Step, (float)property.GetValue(OptionsWrapper<T>.Options, null),
+            var slider = (UISlider)group.AddSlider(text, attr.Min, attr.Max, attr.Step, Mathf.Clamp(finalValue, attr.Min, attr.Max),
                 f =>
                 {
-                    property.SetValue(OptionsWrapper<T>.Options, f, null);
+                    if (value is float)
+                    {
+                        property.SetValue(OptionsWrapper<T>.Options, f, null);
+                    }
+                    else if (value is byte)
+                    {
+                        property.SetValue(OptionsWrapper<T>.Options, (byte)Math.Round(f, MidpointRounding.AwayFromZero), null);
+                    }
+                    else if (value is int)
+                    {
+                        property.SetValue(OptionsWrapper<T>.Options, (int)Math.Round(f, MidpointRounding.AwayFromZero), null);
+                    }
                     OptionsWrapper<T>.SaveOptions();
                     attr.Action<float>().Invoke(f);
                     if (valueLabel != null)
@@ -188,7 +264,7 @@ namespace DaylightClassic.OptionsFramework.Extensions
             }
             valueLabel.AlignTo(slider, UIAlignAnchor.TopLeft);
             valueLabel.relativePosition = new Vector3(240, 0, 0);
-            valueLabel.text = property.GetValue(OptionsWrapper<T>.Options, null).ToString();
+            valueLabel.text = value.ToString();
             return slider;
         }
     }

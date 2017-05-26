@@ -13,12 +13,12 @@ namespace DaylightClassic
         {
             base.OnLevelLoaded(mode);
             DaylightClassic.Initialize();
-            DaylightClassic.ReplaceFogEffect(OptionsWrapper<Options>.Options.fogEffect);
-            DaylightClassic.ReplaceSunlightColor(OptionsWrapper<Options>.Options.sunlightColor);
-            DaylightClassic.ReplaceSunlightIntensity(OptionsWrapper<Options>.Options.sunlightIntensity);
-            DaylightClassic.ReplaceLuts(OptionsWrapper<Options>.Options.stockLuts);
-            DaylightClassic.ReplaceLatLong(OptionsWrapper<Options>.Options.sunPosition);
-            DaylightClassic.ReplaceFogColor(OptionsWrapper<Options>.Options.fogColor);
+            DaylightClassic.ReplaceFogEffect(OptionsWrapper<Options>.Options.FogEffect);
+            DaylightClassic.ReplaceSunlightColor(OptionsWrapper<Options>.Options.SunlightColor);
+            DaylightClassic.ReplaceSunlightIntensity(OptionsWrapper<Options>.Options.SunlightIntensity);
+            DaylightClassic.ReplaceLuts(OptionsWrapper<Options>.Options.StockLuts);
+            DaylightClassic.ReplaceLatLong(OptionsWrapper<Options>.Options.SunPosition);
+            DaylightClassic.ReplaceFogColor(OptionsWrapper<Options>.Options.FogColor);
         }
 
         public override void OnLevelUnloading()

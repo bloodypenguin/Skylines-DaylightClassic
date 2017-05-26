@@ -22,7 +22,7 @@ namespace DaylightClassic
         {
             if (!_previousWaveLengths.Equals(WaveLengthsClassic) || !_previousSkyTint.Equals(SkyTintClassic))
             {
-                if (DaylightClassic.ReplaceFogColor(OptionsWrapper<Options>.Options.fogColor))
+                if (DaylightClassic.ReplaceFogColor(OptionsWrapper<Options>.Options.FogColor))
                 {
                     _previousWaveLengths = WaveLengthsClassic;
                     _previousSkyTint = SkyTintClassic;

@@ -20,7 +20,7 @@ namespace DaylightClassic
         {
             var dayNightEnabled = Singleton<SimulationManager>.instance.m_enableDayNight;
             if (dayNightEnabled == _previousEffectState && _previousFogColorState ==
-                OptionsWrapper<Options>.Options.fogColor && _initialized)
+                OptionsWrapper<Options>.Options.FogColor && _initialized)
             {
                 return;
             }
@@ -58,14 +58,14 @@ namespace DaylightClassic
                         dnfe.enabled = dayNightEnabled;
                         if (dnfe.enabled)
                         {
-                            DaylightClassic.ReplaceFogColorImpl(OptionsWrapper<Options>.Options.fogColor);
+                            DaylightClassic.ReplaceFogColorImpl(OptionsWrapper<Options>.Options.FogColor);
                         }
                         break;
                     }
                 }
             }
             _previousEffectState = dayNightEnabled;
-            _previousFogColorState = OptionsWrapper<Options>.Options.fogColor;
+            _previousFogColorState = OptionsWrapper<Options>.Options.FogColor;
         }
     }
 }

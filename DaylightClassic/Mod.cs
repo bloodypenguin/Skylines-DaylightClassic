@@ -8,7 +8,8 @@ namespace DaylightClassic
 {
     public class Mod : IUserMod
     {
-        public static Translation translation = new Translation();
+        private static UICheckBox[] checkBoxes;
+        private static readonly Translation translation = new Translation();
 
         public string Name => "Daylight Classic";
         public string Description => translation.GetTranslation("DC_DESCRIPTION");
@@ -16,23 +17,23 @@ namespace DaylightClassic
         public void OnSettingsUI(UIHelperBase helper)
         {
             var components =  helper.AddOptionsGroup<Options>(s => translation.GetTranslation(s));
-            var checkBoxes = components.OfType<UICheckBox>().ToArray();
-            var group = helper.AddGroup(translation.GetTranslation("DC_ACTIONS_SHORTCUTS"));
+            checkBoxes = components.OfType<UICheckBox>().ToArray();
+        }
 
-            group.AddButton(translation.GetTranslation("DC_ACTION_TO_CLASSIC"), () =>
+        public static void AllToClassic()
+        {
+            foreach (var uiCheckBox in checkBoxes)
             {
-                foreach (var uiCheckBox in checkBoxes)
-                {
-                    uiCheckBox.isChecked = true;
-                }
-            });
-            group.AddButton(translation.GetTranslation("DC_ACTION_TO_AD"), () =>
+                uiCheckBox.isChecked = true;
+            }
+        }
+
+        public static void AllToAfterDark()
+        {
+            foreach (var uiCheckBox in checkBoxes)
             {
-                foreach (var uiCheckBox in checkBoxes)
-                {
-                    uiCheckBox.isChecked = false;
-                }
-            });
+                uiCheckBox.isChecked = false;
+            }
         }
     }
 }
