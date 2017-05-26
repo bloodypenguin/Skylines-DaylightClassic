@@ -23,10 +23,10 @@ namespace DaylightClassic.OptionsFramework.Attibutes
             {
                 return s => { };
             }
-            var method = Util.FindType(ActionClass).GetMethod(ActionMethod, BindingFlags.Public | BindingFlags.Static);
+            var method = Util.FindTypeInCurrentAssembly(ActionClass).GetMethod(ActionMethod, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static);
             if (method == null)
             {
-                return s => { };
+                throw new Exception($"A static method {ActionMethod} of class {ActionClass} wasn't found!");
             }
             return s =>
             {
@@ -40,10 +40,10 @@ namespace DaylightClassic.OptionsFramework.Attibutes
             {
                 return () => { };
             }
-            var method = Util.FindType(ActionClass).GetMethod(ActionMethod, BindingFlags.Public | BindingFlags.Static);
+            var method = Util.FindTypeInCurrentAssembly(ActionClass).GetMethod(ActionMethod, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static);
             if (method == null)
             {
-                return () => { };
+                throw new Exception($"A static method {ActionMethod} of class {ActionClass} wasn't found!");
             }
             return () =>
             {

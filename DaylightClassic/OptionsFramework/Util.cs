@@ -5,22 +5,20 @@ namespace DaylightClassic.OptionsFramework
 {
     internal class Util
     {
-        public static Type FindType(string className)
+        public static Type FindTypeInCurrentAssembly(string className)
         {
-            foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
+            var assembly = AppDomain.CurrentDomain.GetAssemblies().First(a => a.GetTypes().Any(t => t == typeof(Util)));
+            try
             {
-                try
+                var types = assembly.GetTypes();
+                foreach (var type in types.Where(type => type.Name == className))
                 {
-                    var types = assembly.GetTypes();
-                    foreach (var type in types.Where(type => type.Name == className))
-                    {
-                        return type;
-                    }
+                    return type;
                 }
-                catch
-                {
-                    // ignored
-                }
+            }
+            catch(Exception e)
+            {
+                UnityEngine.Debug.LogException(e);
             }
             return null;
         }

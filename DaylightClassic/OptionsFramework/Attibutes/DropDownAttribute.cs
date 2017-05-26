@@ -16,7 +16,7 @@ namespace DaylightClassic.OptionsFramework.Attibutes
 
         public IList<KeyValuePair<string, int>> GetItems(Func<string, string> translator = null)
         {
-            var type = Util.FindType(ItemsClass);
+            var type = Util.FindTypeInCurrentAssembly(ItemsClass);
             var enumValues = Enum.GetValues(type);
             return (from object enumValue in enumValues
                 let code = (int) enumValue
