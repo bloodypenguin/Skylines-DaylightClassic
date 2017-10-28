@@ -6,25 +6,25 @@ namespace DaylightClassic
 {
     public class DayNightCycleMonitor : MonoBehaviour
     {
-        private bool _previousEffectState;
         private bool _previousFogColorState;
         private bool _initialized;
+        private RenderProperties renderProperties;
+        private bool cachedNight;
 
         public void Awake()
         {
-            var dayNightEnabled = Singleton<SimulationManager>.instance.m_enableDayNight;
-            SetUpEffects(dayNightEnabled);
+            cachedNight = Singleton<SimulationManager>.instance.m_isNightTime;
+            SetUpEffects(cachedNight);
         }
 
         public void Update()
         {
-            var dayNightEnabled = Singleton<SimulationManager>.instance.m_enableDayNight;
-            if (dayNightEnabled == _previousEffectState && _previousFogColorState ==
-                OptionsWrapper<Options>.Options.FogColor && _initialized)
+            if (cachedNight == SimulationManager.instance.m_isNightTime && _previousFogColorState == OptionsWrapper<Options>.Options.FogColor && _initialized)
             {
                 return;
             }
-            SetUpEffects(dayNightEnabled);
+            cachedNight = SimulationManager.instance.m_isNightTime;
+            SetUpEffects(SimulationManager.instance.m_isNightTime);
             _initialized = true;
         }
 
@@ -33,7 +33,7 @@ namespace DaylightClassic
             SetUpEffects(true);
         }
 
-        private void SetUpEffects(bool dayNightEnabled)
+        private void SetUpEffects(bool isNight)
         {
             var behaviors = Camera.main?.GetComponents<MonoBehaviour>();
             if (behaviors == null)
@@ -46,7 +46,7 @@ namespace DaylightClassic
                 {
                     case FogEffect fe:
                     {
-                        fe.enabled = !dayNightEnabled;
+                        fe.enabled = !isNight;
                         if (fe.enabled)
                         {
                             DaylightClassic.ReplaceFogColorImpl(false);
@@ -55,7 +55,7 @@ namespace DaylightClassic
                     }
                     case DayNightFogEffect dnfe:
                     {
-                        dnfe.enabled = dayNightEnabled;
+                        dnfe.enabled = isNight;
                         if (dnfe.enabled)
                         {
                             DaylightClassic.ReplaceFogColorImpl(OptionsWrapper<Options>.Options.FogColor);
@@ -64,7 +64,6 @@ namespace DaylightClassic
                     }
                 }
             }
-            _previousEffectState = dayNightEnabled;
             _previousFogColorState = OptionsWrapper<Options>.Options.FogColor;
         }
     }

@@ -9,7 +9,7 @@
 		<Translation ID="DC_OPTION_SUN_COLOR" String="Classic sunlight color" />
 		<Translation ID="DC_OPTION_SUN_INTENSITY" String="Classic sunlight intensity" />
 		<Translation ID="DC_OPTION_SUN_POSITION" String="Classic sun position" />
-		<Translation ID="DC_OPTION_FOG_EFFECT" String="Classic fog effect (works only if day/night cycle is disabled)" />
+		<Translation ID="DC_OPTION_FOG_EFFECT" String="Classic fog effect" />
 		<Translation ID="DC_OPTION_FOG_COLOR" String="Classic fog color for AD fog effect (side effect: makes sunsets less colorful)" />
   <!-- ACTIONS -->
   	<Translation ID="DC_ACTIONS_SHORTCUTS" String="Quick selection" />

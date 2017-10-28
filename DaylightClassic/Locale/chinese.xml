@@ -9,7 +9,7 @@
     <Translation ID="DC_OPTION_SUN_COLOR" String="经典日光色彩" />
     <Translation ID="DC_OPTION_SUN_INTENSITY" String="经典日光强度" />
     <Translation ID="DC_OPTION_SUN_POSITION" String="经典太阳轨迹" />
-    <Translation ID="DC_OPTION_FOG_EFFECT" String="经典雾效果 (在关闭昼夜循环后才会生效)" />
+    <Translation ID="DC_OPTION_FOG_EFFECT" String="经典雾效果" />
     <Translation ID="DC_OPTION_FOG_COLOR" String="经典夜间雾效果色彩 (副作用：日落时的画面色彩会略微淡化)" />
     <!-- ACTIONS -->
     <Translation ID="DC_ACTIONS_SHORTCUTS" String="所有选项一键选择" />

@@ -95,11 +95,7 @@ namespace DaylightClassic
             _fogColorProperties.AddComponent<DaylightClassicProperties>();
             _dayNightProperties = Object.FindObjectOfType<DayNightProperties>();
             var renderProperties = Object.FindObjectOfType<RenderProperties>();
-            var env = Util.GetEnv();
-            if (env == "North")
-            {
-                renderProperties.m_sun = _dayNightProperties.sunLightSource.transform;
-            }
+            renderProperties.m_sun = _dayNightProperties.sunLightSource.transform;
             _ingame = true;
         }
 
