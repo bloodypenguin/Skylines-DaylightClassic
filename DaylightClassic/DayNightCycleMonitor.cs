@@ -8,22 +8,15 @@ namespace DaylightClassic
     {
         private bool _previousFogColorState;
         private bool _initialized;
-        private RenderProperties renderProperties;
-        private bool cachedNight;
-
-        public void Awake()
-        {
-            cachedNight = Singleton<SimulationManager>.instance.m_isNightTime;
-            SetUpEffects(cachedNight);
-        }
+        private bool _cachedNight;
 
         public void Update()
         {
-            if (cachedNight == SimulationManager.instance.m_isNightTime && _previousFogColorState == OptionsWrapper<Options>.Options.FogColor && _initialized)
+            if (_initialized && _cachedNight == SimulationManager.instance.m_isNightTime && _previousFogColorState == OptionsWrapper<Options>.Options.FogColor)
             {
                 return;
             }
-            cachedNight = SimulationManager.instance.m_isNightTime;
+            _cachedNight = SimulationManager.instance.m_isNightTime;
             SetUpEffects(SimulationManager.instance.m_isNightTime);
             _initialized = true;
         }
