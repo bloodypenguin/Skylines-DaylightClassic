@@ -9,16 +9,23 @@ namespace DaylightClassic
         private bool _previousFogColorState;
         private bool _initialized;
         private bool _cachedNight;
+        private bool _cachedDisableOption;
+        private bool _cachedDayNightCycleState;
 
         public void Update()
         {
-            if (_initialized && _cachedNight == SimulationManager.instance.m_isNightTime && _previousFogColorState == OptionsWrapper<Options>.Options.FogColor)
+            var dayNightEnabled = Singleton<SimulationManager>.instance.m_enableDayNight;
+            var disableClassicFogEffectIfDayNightIsOn = !OptionsWrapper<Options>.Options.AllowClassicFogEffectIfDayNightIsOn;
+            if (_initialized && disableClassicFogEffectIfDayNightIsOn == _cachedDisableOption && dayNightEnabled == _cachedDayNightCycleState &&
+                _cachedNight == SimulationManager.instance.m_isNightTime && _previousFogColorState == OptionsWrapper<Options>.Options.FogColor)
             {
                 return;
             }
-            _cachedNight = SimulationManager.instance.m_isNightTime;
-            SetUpEffects(SimulationManager.instance.m_isNightTime);
+            SetUpEffects(SimulationManager.instance.m_isNightTime || dayNightEnabled && disableClassicFogEffectIfDayNightIsOn);
             _initialized = true;
+            _cachedDisableOption = disableClassicFogEffectIfDayNightIsOn;
+            _cachedNight = SimulationManager.instance.m_isNightTime;
+            _cachedDayNightCycleState = dayNightEnabled;
         }
 
         public void OnDestroy()

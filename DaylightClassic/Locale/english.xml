@@ -11,6 +11,7 @@
 		<Translation ID="DC_OPTION_SUN_POSITION" String="Classic sun position" />
 		<Translation ID="DC_OPTION_FOG_EFFECT" String="Classic fog effect" />
 		<Translation ID="DC_OPTION_FOG_COLOR" String="Classic fog color for AD fog effect (side effect: makes sunsets less colorful)" />
+    <Translation ID="DC_OPTION_CLASSIC_EFFECT_IF_CYCLE_ENABLED" String="Allow Classic fog effect if day/night cycle is on" />
   <!-- ACTIONS -->
   	<Translation ID="DC_ACTIONS_SHORTCUTS" String="Quick selection" />
     <Translation ID="DC_ACTION_TO_CLASSIC" String="All to Classic" />

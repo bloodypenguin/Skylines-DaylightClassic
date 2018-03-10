@@ -34,6 +34,10 @@ namespace DaylightClassic
         [Checkbox("DC_OPTION_FOG_COLOR", ADVANCED, nameof(DaylightClassic), nameof(DaylightClassic.ReplaceFogColor))]
         public bool FogColor { set; get; } = true;
 
+        [XmlElement("allowClassicFogEffectIfDayNightIsOn")]
+        [Checkbox("DC_OPTION_CLASSIC_EFFECT_IF_CYCLE_ENABLED", ADVANCED, nameof(DaylightClassic))]
+        public bool AllowClassicFogEffectIfDayNightIsOn { set; get; } = true;
+
         [XmlIgnore]
         [Button("DC_ACTION_TO_CLASSIC", SHORTCUTS, nameof(Mod), nameof(Mod.AllToClassic))]
         public object AllToClassicButton { set; get; } = null;

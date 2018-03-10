@@ -11,6 +11,7 @@
     <Translation ID="DC_OPTION_SUN_POSITION" String="经典太阳轨迹" />
     <Translation ID="DC_OPTION_FOG_EFFECT" String="经典雾效果" />
     <Translation ID="DC_OPTION_FOG_COLOR" String="经典夜间雾效果色彩 (副作用：日落时的画面色彩会略微淡化)" />
+    <Translation ID="DC_OPTION_CLASSIC_EFFECT_IF_CYCLE_ENABLED" String="Allow Classic fog effect if day/night cycle is on" />
     <!-- ACTIONS -->
     <Translation ID="DC_ACTIONS_SHORTCUTS" String="所有选项一键选择" />
     <Translation ID="DC_ACTION_TO_CLASSIC" String="切换到经典风格" />
