@@ -78,6 +78,7 @@
   <ItemGroup />
   <ItemGroup>
     <Content Include="Locale\english.xml" />
+    <Content Include="Locale\korean.xml" />
     <Content Include="Locale\russian.xml">
       <SubType>Designer</SubType>
     </Content>
