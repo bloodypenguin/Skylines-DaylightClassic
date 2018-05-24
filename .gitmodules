@@ -1,0 +1,4 @@
+[submodule "DaylightClassic/OptionsFramework"]
+	path = DaylightClassic/OptionsFramework
+	url = git@github.com:earalov/OptionsFramework.git
+	branch = customization/Skylines-DaylightClassic
