@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Language UniqueName="fr" ReadableName="Français" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Translations>
+    <Translation ID="DC_DESCRIPTION" String="Ramène la couleur blanche classique de la lumière du jour" />
+	<!-- OPTIONS -->
+		<Translation ID="DC_OPTIONS_BASIC" String="Caractéristiques de base (recommandé pour tout le monde)" />
+		<Translation ID="DC_OPTIONS_ADVANCED" String="Fonctionnalités avancées (effets secondaires possibles)" />
+		<Translation ID="DC_OPTION_LUTS" String="Stock classique LUTs" />
+		<Translation ID="DC_OPTION_SUN_COLOR" String="Couleur classique de la lumière du soleil" />
+		<Translation ID="DC_OPTION_SUN_INTENSITY" String="Intensité classique du soleil" />
+		<Translation ID="DC_OPTION_SUN_POSITION" String="Position classique du soleil" />
+		<Translation ID="DC_OPTION_FOG_EFFECT" String="Effet de brouillard classique" />
+		<Translation ID="DC_OPTION_FOG_COLOR" String="Couleur de brouillard classique pour l'effet brouillard AD (effet secondaire : rend les couchers de soleil moins colorés)" />
+    <Translation ID="DC_OPTION_CLASSIC_EFFECT_IF_CYCLE_ENABLED" String="Autoriser l'effet de brouillard classique si le cycle jour / nuit est activé" />
+  <!-- ACTIONS -->
+  	<Translation ID="DC_ACTIONS_SHORTCUTS" String="Sélection rapide" />
+    <Translation ID="DC_ACTION_TO_CLASSIC" String="Tout est classique" />
+    <Translation ID="DC_ACTION_TO_AD" String="Tout comme dans After Dark" />
+  </Translations>
+</Language>
