@@ -7,7 +7,7 @@ namespace DaylightClassic
 {
     public static class DaylightClassic
     {
-        public const string GameObjectName = "DaylightClassicMonitor";
+        public const string ForEffectReplacerGoName = "DaylightClassicMonitor";
 
         private const string Europe = "LUTeurope";
         private const string Sunny = "LUTSunny";
@@ -258,20 +258,20 @@ namespace DaylightClassic
             {
                 return;
             }
-            var gameObject = GameObject.Find(GameObjectName);
+            var effectReplacerGo = GameObject.Find(ForEffectReplacerGoName);
             if (toClassic)
             {
-                if (gameObject == null)
+                if (effectReplacerGo == null)
                 {
-                    gameObject = new GameObject(GameObjectName);
-                    gameObject.AddComponent<DayNightCycleMonitor>();
+                    effectReplacerGo = new GameObject(ForEffectReplacerGoName);
+                    effectReplacerGo.AddComponent<FogEffectReplacer>();
                 }
             }
             else
             {
-                if (gameObject != null)
+                if (effectReplacerGo != null)
                 {
-                    Object.Destroy(gameObject);
+                    Object.Destroy(effectReplacerGo);
                 }
             }
         }
@@ -324,7 +324,7 @@ namespace DaylightClassic
 
         public static bool ReplaceFogColor(bool toClassic)
         {
-            if (!_ingame || OptionsWrapper<Options>.Options.FogEffect)
+            if (!_ingame)
             {
                 return false;
             }

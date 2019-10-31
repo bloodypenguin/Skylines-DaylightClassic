@@ -34,7 +34,7 @@
     <Compile Include="DaylightClassic.cs" />
     <Compile Include="DaylightClassicProperties.cs" />
     <Compile Include="Mod.cs" />
-    <Compile Include="DayNightCycleMonitor.cs" />
+    <Compile Include="FogEffectReplacer.cs" />
     <Compile Include="LoadingExtension.cs" />
     <Compile Include="Options.cs" />
     <Compile Include="OptionsFramework\Attibutes\AbstractOptionsAttribute.cs" />
