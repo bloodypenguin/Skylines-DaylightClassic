@@ -1,14 +1,11 @@
 ﻿using ColossalFramework;
 using DaylightClassic.OptionsFramework;
 using UnityEngine;
-using UnityEngine.Networking.Match;
 
 namespace DaylightClassic
 {
     public static class DaylightClassic
     {
-        public const string ForEffectReplacerGoName = "DaylightClassicMonitor";
-
         private const string Europe = "LUTeurope";
         private const string Sunny = "LUTSunny";
         private const string North = "LUTNorth";
@@ -31,62 +28,104 @@ namespace DaylightClassic
         private const float ExposureClassic = 1.0f;
         private static float _intensityAd = -1.0f;
         private static float _exposureAd = -1.0f;
-        private static bool _ingame;
+
         private static float _lonAd = -1.0f;
         private static float _latAd = -1.0f;
 
         private static readonly Gradient ColorClassic = new Gradient()
         {
             colorKeys = new GradientColorKey[8]
-                {
-                    new GradientColorKey((Color) new Color32((byte) 55, (byte) 66, (byte) 77, byte.MaxValue), 0.23f),
-                    new GradientColorKey((Color) new Color32((byte) 245, (byte) 173, (byte) 84, byte.MaxValue), 0.26f),
-                    new GradientColorKey((Color) new Color32((byte) 252, (byte) 222, (byte) 186, byte.MaxValue), 0.29f),
-                    new GradientColorKey((Color) new Color32((byte) 255, (byte) 255, (byte) 255, byte.MaxValue), 0.35f),
-                    new GradientColorKey((Color) new Color32((byte) 255, (byte) 255, (byte) 255, byte.MaxValue), 0.65f),
-                    new GradientColorKey((Color) new Color32((byte) 252, (byte) 222, (byte) 186, byte.MaxValue), 0.71f),
-                    new GradientColorKey((Color) new Color32((byte) 245, (byte) 173, (byte) 84, byte.MaxValue), 0.74f),
-                    new GradientColorKey((Color) new Color32((byte) 55, (byte) 66, (byte) 77, byte.MaxValue), 0.77f)
-                },
+            {
+                new GradientColorKey((Color) new Color32((byte) 55, (byte) 66, (byte) 77, byte.MaxValue), 0.23f),
+                new GradientColorKey((Color) new Color32((byte) 245, (byte) 173, (byte) 84, byte.MaxValue), 0.26f),
+                new GradientColorKey((Color) new Color32((byte) 252, (byte) 222, (byte) 186, byte.MaxValue), 0.29f),
+                new GradientColorKey((Color) new Color32((byte) 255, (byte) 255, (byte) 255, byte.MaxValue), 0.35f),
+                new GradientColorKey((Color) new Color32((byte) 255, (byte) 255, (byte) 255, byte.MaxValue), 0.65f),
+                new GradientColorKey((Color) new Color32((byte) 252, (byte) 222, (byte) 186, byte.MaxValue), 0.71f),
+                new GradientColorKey((Color) new Color32((byte) 245, (byte) 173, (byte) 84, byte.MaxValue), 0.74f),
+                new GradientColorKey((Color) new Color32((byte) 55, (byte) 66, (byte) 77, byte.MaxValue), 0.77f)
+            },
             alphaKeys = new GradientAlphaKey[2]
-                {
-                    new GradientAlphaKey(1f, 0.0f),
-                    new GradientAlphaKey(1f, 1f)
-                }
+            {
+                new GradientAlphaKey(1f, 0.0f),
+                new GradientAlphaKey(1f, 1f)
+            }
         };
 
         private static Gradient _colorAd;
         private static DayNightProperties _dayNightProperties;
-        private static GameObject _fogColorProperties;
+        private static GameObject _gameObject;
 
 
-        public static void Initialize()
+        public static void SetUp()
         {
+            _dayNightProperties = Object.FindObjectOfType<DayNightProperties>();
+            Object.FindObjectOfType<RenderProperties>().m_sun =
+                _dayNightProperties.sunLightSource.transform; //to fix sun position in some envs
+            
             Reset();
 
-            _fogColorProperties = new GameObject("DaylightClassicProperties");
-            _fogColorProperties.AddComponent<FogColorReplacer>();
-            _dayNightProperties = Object.FindObjectOfType<DayNightProperties>();
-            var renderProperties = Object.FindObjectOfType<RenderProperties>();
-            renderProperties.m_sun = _dayNightProperties.sunLightSource.transform;
-            _ingame = true;
+            _gameObject = new GameObject("DaylightClassic");
+            _gameObject.AddComponent<FogColorReplacer>();
+
+            ReplaceFogEffect(OptionsWrapper<Options>.Options.FogEffect);
+            ReplaceSunlightColor(OptionsWrapper<Options>.Options.SunlightColor);
+            ReplaceSunlightIntensity(OptionsWrapper<Options>.Options.SunlightIntensity);
+            ReplaceLuts(OptionsWrapper<Options>.Options.StockLuts);
+            ReplaceLatLong(OptionsWrapper<Options>.Options.SunPosition);
         }
 
-        public static void Reset()
+        public static void CleanUp()
         {
-            _fogColorProperties = null;
-            _dayNightProperties = null;
-            var go = GameObject.FindObjectOfType<FogColorReplacer>();
-            if (go != null)
+            ReplaceFogEffect(false);
+            ReplaceSunlightColor(false);
+            ReplaceSunlightIntensity(false);
+            ReplaceLuts(false);
+            ReplaceLatLong(false);
+
+            if (_gameObject != null)
             {
-                GameObject.Destroy(go);
+                Object.Destroy(_gameObject);
+                _gameObject = null;
             }
-            _ingame = false;
-            _europeanClassic = null;
-            _tropicalClassic = null;
-            _northClassic = null;
-            _sunnyClassic = null;
-            _winterClassic = null;
+
+            Reset();
+
+            _dayNightProperties = null;
+        }
+
+        private static void Reset()
+        {
+            if (_europeanClassic != null)
+            {
+                Object.Destroy(_europeanClassic);
+                _europeanClassic = null;
+            }
+
+            if (_tropicalClassic != null)
+            {
+                Object.Destroy(_tropicalClassic);
+                _tropicalClassic = null;
+            }
+
+            if (_northClassic != null)
+            {
+                Object.Destroy(_northClassic);
+                _northClassic = null;
+            }
+
+            if (_sunnyClassic != null)
+            {
+                Object.Destroy(_sunnyClassic);
+                _sunnyClassic = null;
+            }
+
+            if (_winterClassic != null)
+            {
+                Object.Destroy(_winterClassic);
+                _winterClassic = null;
+            }
+
             _europeanAd = null;
             _tropicalAd = null;
             _northAd = null;
@@ -95,16 +134,15 @@ namespace DaylightClassic
             _intensityAd = -1.0f;
             _lonAd = -1.0f;
             _latAd = -1.0f;
-
-            //TODO(earalov): destroy textures?
         }
 
         public static void ReplaceLuts(bool toClassic)
         {
-            if (!_ingame)
+            if (!InGame)
             {
                 return;
             }
+
             for (var i = 0; i < ColorCorrectionManager.instance.m_BuiltinLUTs.Length; i++)
             {
                 var replacement1 = GetReplacementLut(toClassic,
@@ -114,8 +152,10 @@ namespace DaylightClassic
                 {
                     continue;
                 }
+
                 ColorCorrectionManager.instance.m_BuiltinLUTs[i] = replacement1;
             }
+
             var renderProperties = Object.FindObjectOfType<RenderProperties>();
             var replacement2 = GetReplacementLut(toClassic,
                 renderProperties.m_ColorCorrectionLUT.name,
@@ -124,13 +164,15 @@ namespace DaylightClassic
             {
                 renderProperties.m_ColorCorrectionLUT = replacement2;
             }
+
             var size = ColorCorrectionManager.instance.items.Length;
             var lastSelection = ColorCorrectionManager.instance.lastSelection;
             ColorCorrectionManager.instance.currentSelection = (lastSelection + 1) % size;
             ColorCorrectionManager.instance.currentSelection = lastSelection;
         }
 
-        private static Texture3DWrapper GetReplacementLut(bool toClassic, string builtinLutName, Texture3DWrapper builtinLut)
+        private static Texture3DWrapper GetReplacementLut(bool toClassic, string builtinLutName,
+            Texture3DWrapper builtinLut)
         {
             switch (builtinLutName)
             {
@@ -139,50 +181,60 @@ namespace DaylightClassic
                     {
                         _europeanAd = builtinLut;
                     }
+
                     if (_europeanClassic == null)
                     {
                         _europeanClassic = Util.LoadTexture("DaylightClassic.lut.EuropeanClassic.png", Europe);
                     }
+
                     return toClassic ? _europeanClassic : _europeanAd;
                 case Tropical:
                     if (_tropicalAd == null)
                     {
                         _tropicalAd = builtinLut;
                     }
+
                     if (_tropicalClassic == null)
                     {
                         _tropicalClassic = Util.LoadTexture("DaylightClassic.lut.TropicalClassic.png", Tropical);
                     }
+
                     return toClassic ? _tropicalClassic : _tropicalAd;
                 case North:
                     if (_northAd == null)
                     {
                         _northAd = builtinLut;
                     }
+
                     if (_northClassic == null)
                     {
                         _northClassic = Util.LoadTexture("DaylightClassic.lut.BorealClassic.png", North);
                     }
+
                     return toClassic ? _northClassic : _northAd;
                 case Sunny:
                     if (_sunnyAd == null)
                     {
                         _sunnyAd = builtinLut;
                     }
+
                     if (_sunnyClassic == null)
                     {
                         _sunnyClassic = Util.LoadTexture("DaylightClassic.lut.TemperateClassic.png", Sunny);
                     }
+
                     return toClassic ? _sunnyClassic : _sunnyAd;
                 case Winter:
                     if (_winterAd == null)
                     {
                         _winterAd = builtinLut;
                     }
+
                     if (_winterClassic == null)
                     {
                         _winterClassic = Util.LoadTexture("DaylightClassic.lut.WinterClassic.png", Winter);
                     }
+
                     return toClassic ? _winterClassic : _winterAd;
                 default:
                     return null;
@@ -191,108 +243,111 @@ namespace DaylightClassic
 
         public static void ReplaceSunlightIntensity(bool toClassic)
         {
-            if (!_ingame)
+            if (!InGame)
             {
                 return;
             }
-            var prop = Object.FindObjectOfType<DayNightProperties>();
-
 
             if (_intensityAd < 0)
             {
-                _intensityAd = prop.m_SunIntensity;
+                _intensityAd = _dayNightProperties.m_SunIntensity;
             }
+
             if (_exposureAd < 0)
             {
-                _exposureAd = prop.m_Exposure;
+                _exposureAd = _dayNightProperties.m_Exposure;
             }
-            prop.m_SunIntensity = toClassic ? IntensityClassic : _intensityAd;
-            prop.m_Exposure = toClassic ? ExposureClassic : _exposureAd;
+
+            _dayNightProperties.m_SunIntensity = toClassic ? IntensityClassic : _intensityAd;
+            _dayNightProperties.m_Exposure = toClassic ? ExposureClassic : _exposureAd;
         }
 
         public static void ReplaceSunlightColor(bool toClassic)
         {
-            if (!_ingame)
+            if (!InGame)
             {
                 return;
             }
-            var prop = Object.FindObjectOfType<DayNightProperties>();
+
             if (_colorAd == null)
             {
-                _colorAd = prop.m_LightColor;
+                _colorAd = _dayNightProperties.m_LightColor;
             }
-            prop.m_LightColor = toClassic ? ColorClassic : _colorAd;
+
+            _dayNightProperties.m_LightColor = toClassic ? ColorClassic : _colorAd;
         }
 
         public static void ReplaceFogEffect(bool toClassic)
         {
-            if (!_ingame)
+            if (!InGame)
             {
                 return;
             }
-            var effectReplacerGo = GameObject.Find(ForEffectReplacerGoName);
+
             if (toClassic)
             {
-                if (effectReplacerGo == null)
+                if (_gameObject.GetComponent<FogEffectReplacer>() == null)
                 {
-                    effectReplacerGo = new GameObject(ForEffectReplacerGoName);
-                    effectReplacerGo.AddComponent<FogEffectReplacer>();
+                    _gameObject.AddComponent<FogEffectReplacer>();
                 }
             }
             else
             {
-                if (effectReplacerGo != null)
+                if (_gameObject.GetComponent<FogEffectReplacer>() != null)
                 {
-                    Object.Destroy(effectReplacerGo);
+                    Object.Destroy(_gameObject.GetComponent<FogEffectReplacer>());
                 }
             }
         }
 
         public static void ReplaceLatLong(bool toClassic)
         {
-            if (!_ingame)
+            if (!InGame)
             {
                 return;
             }
-            var prop = Object.FindObjectOfType<DayNightProperties>();
+
             if (_lonAd < 0.0f)
             {
-                _lonAd = prop.m_Longitude;
+                _lonAd = _dayNightProperties.m_Longitude;
             }
+
             if (_latAd < 0.0f)
             {
-                _latAd = prop.m_Latitude;
+                _latAd = _dayNightProperties.m_Latitude;
             }
+
             var env = Util.GetEnv();
             if (toClassic)
             {
                 if (env == "Europe") //London
                 {
-                    prop.m_Latitude = 51.5072f;
-                    prop.m_Longitude = -0.1275f;
+                    _dayNightProperties.m_Latitude = 51.5072f;
+                    _dayNightProperties.m_Longitude = -0.1275f;
                 }
                 else if (env == "North") //Stockholm
                 {
-                    prop.m_Latitude = 59.3293f;
-                    prop.m_Longitude = 18.0686f;
+                    _dayNightProperties.m_Latitude = 59.3293f;
+                    _dayNightProperties.m_Longitude = 18.0686f;
                 }
                 else if (env == "Sunny") //Malta
                 {
-                    prop.m_Latitude = 35.8833f;
-                    prop.m_Longitude = 14.5000f;
+                    _dayNightProperties.m_Latitude = 35.8833f;
+                    _dayNightProperties.m_Longitude = 14.5000f;
                 }
                 else if (env == "Tropical") //Mecca
                 {
-                    prop.m_Latitude = 21.4167f;
-                    prop.m_Longitude = 39.8167f;
+                    _dayNightProperties.m_Latitude = 21.4167f;
+                    _dayNightProperties.m_Longitude = 39.8167f;
                 }
             }
             else
             {
-                prop.m_Latitude = _latAd;
-                prop.m_Longitude = _lonAd;
+                _dayNightProperties.m_Latitude = _latAd;
+                _dayNightProperties.m_Longitude = _lonAd;
             }
         }
 
+        private static bool InGame => _gameObject != null;
     }
 }
