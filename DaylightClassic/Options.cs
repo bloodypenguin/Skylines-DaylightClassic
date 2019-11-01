@@ -31,7 +31,7 @@ namespace DaylightClassic
         public bool FogEffect { set; get; } = true;
 
         [XmlElement("fogColor")]
-        [Checkbox("DC_OPTION_FOG_COLOR", ADVANCED, typeof(DaylightClassic), nameof(DaylightClassic.ReplaceFogColor))]
+        [Checkbox("DC_OPTION_FOG_COLOR", ADVANCED, typeof(DaylightClassic))]
         public bool FogColor { set; get; } = true;
 
         [XmlElement("allowClassicFogEffectIfDayNightIsOn")]

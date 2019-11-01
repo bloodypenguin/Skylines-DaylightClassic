@@ -18,7 +18,6 @@ namespace DaylightClassic
             DaylightClassic.ReplaceSunlightIntensity(OptionsWrapper<Options>.Options.SunlightIntensity);
             DaylightClassic.ReplaceLuts(OptionsWrapper<Options>.Options.StockLuts);
             DaylightClassic.ReplaceLatLong(OptionsWrapper<Options>.Options.SunPosition);
-            DaylightClassic.ReplaceFogColor(OptionsWrapper<Options>.Options.FogColor);
         }
 
         public override void OnLevelUnloading()
@@ -29,7 +28,6 @@ namespace DaylightClassic
             DaylightClassic.ReplaceSunlightIntensity(false);
             DaylightClassic.ReplaceLuts(false);
             DaylightClassic.ReplaceLatLong(false);
-            DaylightClassic.ReplaceFogColor(false);
             DaylightClassic.Reset();
         }
     }

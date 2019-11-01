@@ -65,15 +65,8 @@ namespace DaylightClassic
                 return;
             }
             _classicEffect.enabled = toClassic;
-            if (_classicEffect.enabled)
-            {
-                DaylightClassic.ReplaceFogColorImpl(false);
-            }
             _newEffect.enabled = !toClassic;
-            if (_newEffect.enabled)
-            {
-                DaylightClassic.ReplaceFogColorImpl(OptionsWrapper<Options>.Options.FogColor);
-            }
+
         }
     }
 }
